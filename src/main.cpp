@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     std::vector<Eigen::Matrix4f> poses; // Assume poses are populated with 4x4 transformation matrices
     std::vector<Eigen::Matrix4f> poses_traj;
 
-    for(int i = 1; i < 2; i++){
+    for(int i = 1; i < raw_pcds.size(); i++){
         
         pcl::io::loadPCDFile(raw_pcds[i-1], *source_cloud);
         pcl::io::loadPCDFile(raw_pcds[i], *target_cloud);
@@ -107,9 +107,9 @@ int main(int argc, char **argv) {
         //pcl::transformPointCloud(*source_cloud, *result, transformation_original);
         pcl::transformPointCloud(*source_cpy, *result_original, transformation_original);
 
-        pcl::io::savePCDFileBinary("../pcds/result_refine_icp.pcd", *result_original);
+        //pcl::io::savePCDFileBinary("../pcds/result_refine_icp.pcd", *result_original);
 
-        if(i % 1 == 0)
+        if(i % 50 == 0)
             visualizePointClouds(result_original, target_cpy, 1);
 
         poses.push_back(transformation_original);
