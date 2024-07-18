@@ -1,4 +1,4 @@
-# Install script for directory: /home/efesendil/Projects/ICP_PCL/src
+# Install script for directory: /home/efesendil/Projects/ICP_PCL
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

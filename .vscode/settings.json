@@ -86,5 +86,5 @@
         "filesystem": "cpp",
         "ios": "cpp"
     },
-    "cmake.sourceDirectory": "/home/efesendil/Projects/ICP_PCL/src"
+    "cmake.sourceDirectory": "/home/efesendil/Projects/ICP_PCL"
 }
