@@ -1207,6 +1207,7 @@ CMakeFiles/pipeline.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/local/include/pcl-1.14/pcl/filters/filter_indices.h \
   /usr/local/include/pcl-1.14/pcl/search/search.h \
   /usr/local/include/pcl-1.14/pcl/filters/voxel_grid.h \
+  /usr/local/include/pcl-1.14/pcl/filters/uniform_sampling.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/iss_3d.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/keypoint.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/impl/keypoint.hpp \
@@ -3294,6 +3295,7 @@ CMakeFiles/pipeline.dir/src/pipeline.cpp.o: ../src/pipeline.cpp \
   /usr/local/include/pcl-1.14/pcl/filters/filter_indices.h \
   /usr/local/include/pcl-1.14/pcl/search/search.h \
   /usr/local/include/pcl-1.14/pcl/filters/voxel_grid.h \
+  /usr/local/include/pcl-1.14/pcl/filters/uniform_sampling.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/iss_3d.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/keypoint.h \
   /usr/local/include/pcl-1.14/pcl/keypoints/impl/keypoint.hpp \
@@ -5193,6 +5195,8 @@ CMakeFiles/pipeline.dir/src/pipeline.cpp.o: ../src/pipeline.cpp \
 /usr/local/include/pcl-1.14/pcl/ModelCoefficients.h:
 
 /usr/local/include/pcl-1.14/pcl/keypoints/iss_3d.h:
+
+/usr/local/include/pcl-1.14/pcl/filters/uniform_sampling.h:
 
 /usr/local/include/pcl-1.14/pcl/filters/filter_indices.h:
 

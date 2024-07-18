@@ -7,6 +7,7 @@
 #include <pcl/filters/filter.h>
 #include <pcl/filters/statistical_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/uniform_sampling.h>
 #include <pcl/keypoints/iss_3d.h>
 #include <pcl/keypoints/harris_3d.h>
 #include <pcl/features/shot.h>

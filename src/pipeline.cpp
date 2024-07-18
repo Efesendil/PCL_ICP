@@ -59,17 +59,23 @@ void visualizeCorrespondences(PointCloudT::Ptr source_cloud,
 void preprocessPointCloud(PointCloudT::Ptr cloud) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Downsampling
-    pcl::VoxelGrid<PointT> vg;
-    vg.setInputCloud(cloud);
-    vg.setLeafSize(0.1f, 0.1f, 0.1f);
-    vg.filter(*cloud);
+    // // Downsampling
+    // pcl::VoxelGrid<PointT> vg;
+    // vg.setInputCloud(cloud);
+    // vg.setLeafSize(0.1f, 0.1f, 0.1f);
+    // vg.filter(*cloud);
+
+    // Uniform Sampling
+    pcl::UniformSampling<PointT> us;
+    us.setInputCloud(cloud);
+    us.setRadiusSearch(0.1f);
+    us.filter(*cloud);
 
     //Noise filtering
     pcl::StatisticalOutlierRemoval<PointT> sor;
     sor.setInputCloud(cloud);
-    sor.setMeanK(10);
-    sor.setStddevMulThresh(0.5);
+    sor.setMeanK(50);
+    sor.setStddevMulThresh(0.1);
     sor.filter(*cloud);
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -89,8 +95,8 @@ void estimateKeypoints(PointCloudT::Ptr cloud, pcl::PointCloud<pcl::PointXYZ>::P
     iss.setNonMaxRadius(2 * 0.1f); // 4 times the leaf size used in voxel grid
     iss.setThreshold21(0.975);
     iss.setThreshold32(0.975);
-    iss.setMinNeighbors(5);
-    iss.setNumberOfThreads(4);
+    iss.setMinNeighbors(10);
+    iss.setNumberOfThreads(16);
     iss.compute(*keypoints);
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -162,7 +168,7 @@ void computeDescriptors(PointCloudT::Ptr cloud,
     pcl::FPFHEstimation<PointT, pcl::Normal, DescriptorT> fpfh;
     fpfh.setSearchSurface(cloud);
     fpfh.setInputNormals(normals);
-    fpfh.setRadiusSearch(0.3);
+    fpfh.setRadiusSearch(0.2);
     fpfh.setInputCloud(keypoints);  // Set keypoints as input cloud
     fpfh.compute(*descriptors);
 
@@ -178,37 +184,71 @@ void computeDescriptors(PointCloudT::Ptr cloud,
     pcl::console::print_info("Computed %zu descriptors\n", descriptors->size());
 }
 
-void multi_scale_keypoint_and_descriptor(PointCloudT::Ptr cloud, 
-                                         pcl::PointCloud<pcl::Normal>::Ptr normals, 
-                                         DescriptorCloudT::Ptr descriptors, 
-                                         pcl::PointCloud<pcl::PointXYZ>::Ptr keypoints) {
-    auto start = std::chrono::high_resolution_clock::now();
+// void computeDescriptors(PointCloudT::Ptr cloud, PointCloudT::Ptr keypoints, pcl::PointCloud<pcl::Normal>::Ptr normals, DescriptorCloudT::Ptr descriptors) {
+//     auto start = std::chrono::high_resolution_clock::now();
 
-    // Initialize FPFHEstimation
-    pcl::FPFHEstimation<PointT, pcl::Normal, DescriptorT>::Ptr fpfh(new pcl::FPFHEstimation<PointT, pcl::Normal, DescriptorT>());
-    fpfh->setInputCloud(cloud);
-    fpfh->setInputNormals(normals);
+//     // Remove NaNs from input cloud
+//     std::vector<int> indices;
+//     pcl::removeNaNFromPointCloud(*cloud, *cloud, indices);
 
-    pcl::MultiscaleFeaturePersistence<PointT, DescriptorT> fper;
-    std::vector<float> scale_values = {0.1f, 0.25f, 0.75f};
-    fper.setScalesVector(scale_values);
-    fper.setAlpha(0.75f);
-    fper.setFeatureEstimator(fpfh);
+//     // Compute normals if not provided
+//     if (normals->empty()) {
+//         pcl::NormalEstimation<PointT, pcl::Normal> ne;
+//         ne.setInputCloud(cloud);
+//         pcl::search::KdTree<PointT>::Ptr tree(new pcl::search::KdTree<PointT>());
+//         ne.setSearchMethod(tree);
+//         ne.setRadiusSearch(0.5);  // Adjust based on point density
+//         ne.compute(*normals);
+
+//         // Debug print
+//         std::cout << "Computed " << normals->size() << " normals." << std::endl;
+//     }
+
+//     // Compute SHOT descriptors
+//     pcl::SHOTEstimation<PointT, pcl::Normal, DescriptorT> shot;
+//     shot.setSearchSurface(cloud);
+//     shot.setInputNormals(normals);
+//     shot.setRadiusSearch(0.2);  // Adjust based on point density and descriptor resolution
+//     shot.setInputCloud(keypoints);  // Use keypoints for descriptor computation
+//     shot.compute(*descriptors);
+
+//     auto end = std::chrono::high_resolution_clock::now();
+//     std::chrono::duration<double> elapsed = end - start;
+//     pcl::console::print_info("Descriptor computation took %.4f seconds.\n", elapsed.count());
+//     pcl::console::print_info("Computed %zu descriptors\n", descriptors->size());
+// }
+
+// void multi_scale_keypoint_and_descriptor(PointCloudT::Ptr cloud, 
+//                                          pcl::PointCloud<pcl::Normal>::Ptr normals, 
+//                                          DescriptorCloudT::Ptr descriptors, 
+//                                          pcl::PointCloud<pcl::PointXYZ>::Ptr keypoints) {
+//     auto start = std::chrono::high_resolution_clock::now();
+
+//     // Initialize FPFHEstimation
+//     pcl::FPFHEstimation<PointT, pcl::Normal, DescriptorT>::Ptr fpfh(new pcl::FPFHEstimation<PointT, pcl::Normal, DescriptorT>());
+//     fpfh->setInputCloud(cloud);
+//     fpfh->setInputNormals(normals);
+
+//     pcl::MultiscaleFeaturePersistence<PointT, DescriptorT> fper;
+//     std::vector<float> scale_values = {0.1f, 0.25f, 0.75f};
+//     fper.setScalesVector(scale_values);
+//     fper.setAlpha(0.75f);
+//     fper.setFeatureEstimator(fpfh);
     
-    // Assuming you want to use L2 as the distance metric
-    fper.setDistanceMetric(pcl::L2);
+//     // Assuming you want to use L2 as the distance metric
+//     fper.setDistanceMetric(pcl::L2);
     
-    // Create a shared pointer for keypoint indices
-    pcl::IndicesPtr keypoint_indices(new std::vector<int>);
-    fper.determinePersistentFeatures(*descriptors, keypoint_indices);
+//     // Create a shared pointer for keypoint indices
+//     pcl::IndicesPtr keypoint_indices(new std::vector<int>);
+//     fper.determinePersistentFeatures(*descriptors, keypoint_indices);
 
-    // Extract keypoints using the indices
-    pcl::copyPointCloud(*cloud, *keypoint_indices, *keypoints);
+//     // Extract keypoints using the indices
+//     pcl::copyPointCloud(*cloud, *keypoint_indices, *keypoints);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Multi-scale keypoint and descriptor estimation took " << elapsed.count() << " seconds." << std::endl;
-}
+//     auto end = std::chrono::high_resolution_clock::now();
+//     std::chrono::duration<double> elapsed = end - start;
+//     std::cout << "Multi-scale keypoint and descriptor estimation took " << elapsed.count() << " seconds." << std::endl;
+// }
 
 void estimateCorrespondences(DescriptorCloudT::Ptr source_descriptors, DescriptorCloudT::Ptr target_descriptors, pcl::CorrespondencesPtr correspondences) {
     auto start = std::chrono::high_resolution_clock::now();
@@ -307,7 +347,7 @@ void refineRegistration(PointCloudT::Ptr source_cloud, PointCloudT::Ptr target_c
     pcl::IterativeClosestPoint<PointT, PointT> icp;
     icp.setInputSource(source_cloud);
     icp.setInputTarget(target_cloud);
-    icp.setMaximumIterations(30);
+    icp.setMaximumIterations(50);
     //icp.setTransformationEpsilon(1e-6);
     icp.setMaxCorrespondenceDistance(2.0); // Adjust this value according to your dataset
     pcl::PointCloud<PointT>::Ptr aligned(new pcl::PointCloud<PointT>());

@@ -42,11 +42,11 @@ int main(int argc, char **argv) {
     // pcl::io::loadPCDFile(argv[1], *source_cloud);
     // pcl::io::loadPCDFile(argv[2], *target_cloud);
 
-    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/st_vallier_indoor_pcd_samples/");
+    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/KITTI/2011_09_26_drive_0039_sync/velodyne_points/pcds/");
     std::vector<Eigen::Matrix4f> poses; // Assume poses are populated with 4x4 transformation matrices
     std::vector<Eigen::Matrix4f> poses_traj;
 
-    for(int i = 1; i < raw_pcds.size(); i++){
+    for(int i = 1; i < 2; i++){
         
         pcl::io::loadPCDFile(raw_pcds[i-1], *source_cloud);
         pcl::io::loadPCDFile(raw_pcds[i], *target_cloud);
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
         preprocessPointCloud(source_cloud);
         preprocessPointCloud(target_cloud);
 
-        visualizePointClouds(source_cloud, target_cloud, 1);
+        //visualizePointClouds(source_cloud, target_cloud, 1);
 
         // Keypoint estimation
         pcl::PointCloud<pcl::PointXYZ>::Ptr source_keypoints(new pcl::PointCloud<pcl::PointXYZ>);
@@ -66,8 +66,8 @@ int main(int argc, char **argv) {
         estimateKeypoints(source_cloud, source_keypoints);
         estimateKeypoints(target_cloud, target_keypoints);
 
-        visualizePointClouds(source_keypoints, source_cloud, 8);
-        visualizePointClouds(target_keypoints, target_cloud, 8);
+        //visualizePointClouds(source_keypoints, source_cloud, 8);
+        //visualizePointClouds(target_keypoints, target_cloud, 8);
 
         // Descriptor computation
         pcl::PointCloud<pcl::Normal>::Ptr source_normals(new pcl::PointCloud<pcl::Normal>);
@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         // Correspondence estimation
         pcl::CorrespondencesPtr correspondences(new pcl::Correspondences);
         estimateCorrespondences(source_descriptors, target_descriptors, correspondences);
-        visualizeCorrespondences(source_cloud, target_cloud, correspondences);
+        //visualizeCorrespondences(source_cloud, target_cloud, correspondences);
 
         // Correspondence rejection using ransac
         pcl::CorrespondencesPtr inliers(new pcl::Correspondences);
@@ -109,7 +109,8 @@ int main(int argc, char **argv) {
 
         pcl::io::savePCDFileBinary("../pcds/result_refine_icp.pcd", *result_original);
 
-        visualizePointClouds(result_original, target_cloud, 1);
+        if(i % 1 == 0)
+            visualizePointClouds(result_original, target_cpy, 1);
 
         poses.push_back(transformation_original);
 
@@ -131,7 +132,7 @@ int main(int argc, char **argv) {
         // Print poses_traj
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
         for (const auto& pose : poses_traj) {
-            cout << pose << endl;
+            //cout << pose << endl;
             pcl::PointXYZ point;
             Eigen::Vector3f pos = pose.block<3, 1>(0, 3);
             point.x = pos(0);
