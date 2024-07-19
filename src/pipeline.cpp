@@ -68,7 +68,7 @@ void preprocessPointCloud(PointCloudT::Ptr cloud) {
     // Uniform Sampling
     pcl::UniformSampling<PointT> us;
     us.setInputCloud(cloud);
-    us.setRadiusSearch(0.1f);
+    us.setRadiusSearch(0.05f); //0.1 for kitti
     us.filter(*cloud);
 
     //Noise filtering

@@ -42,14 +42,25 @@ int main(int argc, char **argv) {
     // pcl::io::loadPCDFile(argv[1], *source_cloud);
     // pcl::io::loadPCDFile(argv[2], *target_cloud);
 
-    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/KITTI/2011_09_26_drive_0039_sync/velodyne_points/pcds/");
+    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/st_vallier_indoor_pcd_samples/indoor_pcds/");
     std::vector<Eigen::Matrix4f> poses; // Assume poses are populated with 4x4 transformation matrices
     std::vector<Eigen::Matrix4f> poses_traj;
 
-    for(int i = 1; i < raw_pcds.size(); i++){
-        
-        pcl::io::loadPCDFile(raw_pcds[i-1], *source_cloud);
-        pcl::io::loadPCDFile(raw_pcds[i], *target_cloud);
+    poses_traj.push_back(Eigen::Matrix4f::Identity());
+
+    PointCloudT::Ptr global_map(new PointCloudT);
+
+
+    for(int i = 1; i < 15 /*raw_pcds.size()*/; i++){
+
+
+        pcl::io::loadPCDFile(raw_pcds[i-1], *target_cloud);
+        pcl::io::loadPCDFile(raw_pcds[i], *source_cloud);
+
+        if (i == 1)
+        {
+            *global_map = *target_cloud;
+        }
 
         PointCloudT::Ptr source_cpy(new PointCloudT(*source_cloud));
         PointCloudT::Ptr target_cpy(new PointCloudT(*target_cloud));
@@ -106,30 +117,21 @@ int main(int argc, char **argv) {
         pcl::PointCloud<PointT>::Ptr result_original (new pcl::PointCloud<PointT>());
         //pcl::transformPointCloud(*source_cloud, *result, transformation_original);
         pcl::transformPointCloud(*source_cpy, *result_original, transformation_original);
+        pcl::transformPointCloud(*result_original, *result_original, poses_traj.back());
+
+        *global_map += *result_original;
 
         //pcl::io::savePCDFileBinary("../pcds/result_refine_icp.pcd", *result_original);
 
-        if(i % 50 == 0)
-            visualizePointClouds(result_original, target_cpy, 1);
+        // if(i % 10 == 0){
+        //     visualizeCorrespondences(source_cloud, target_cloud, correspondences);
+        //     visualizePointClouds(result_original, target_cpy, 1);
+        // }
 
-        poses.push_back(transformation_original);
-
-        // Get poses to create a trajectory
-        Eigen::Matrix4f trajectory = Eigen::Matrix4f::Identity();
-        Eigen::Vector3f temp_trans = Eigen::Vector3f::Zero();
-        Eigen::Matrix3f temp_rot = Eigen::Matrix3f::Identity();
-
-        for (const auto& pose : poses) {
-            temp_trans += temp_rot * pose.block<3, 1>(0, 3);
-            temp_rot *= pose.block<3, 3>(0, 0);
-            
-            trajectory.block<3, 3>(0, 0) += temp_rot;
-            trajectory.block<3, 1>(0, 3) += temp_trans;
-
-            poses_traj.push_back(trajectory);
+        Eigen::Matrix4f pose_global = poses_traj.back() *  transformation_original;     
+        poses_traj.push_back(pose_global);
         }
 
-        // Print poses_traj
         pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
         for (const auto& pose : poses_traj) {
             //cout << pose << endl;
@@ -149,8 +151,10 @@ int main(int argc, char **argv) {
         std::string output_ply_file = "../pcds/traj_odometry.ply";
         pcl::PLYWriter writer;
         writer.write<pcl::PointXYZ>(output_ply_file, *cloud, true);
-        
-    }
+
+        // Save global map to a PCD file
+        pcl::io::savePCDFileBinary("../pcds/global_map.pcd", *global_map);
+
 
     // PointCloudT::Ptr source_cpy(new PointCloudT(*source_cloud));
     // PointCloudT::Ptr target_cpy(new PointCloudT(*target_cloud));
