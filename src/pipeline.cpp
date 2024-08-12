@@ -68,7 +68,7 @@ void preprocessPointCloud(PointCloudT::Ptr cloud) {
     // Uniform Sampling
     pcl::UniformSampling<PointT> us;
     us.setInputCloud(cloud);
-    us.setRadiusSearch(0.05f); //0.1 for kitti
+    us.setRadiusSearch(0.01f); //0.1 for kitti
     us.filter(*cloud);
 
     //Noise filtering
@@ -95,8 +95,8 @@ void estimateKeypoints(PointCloudT::Ptr cloud, pcl::PointCloud<pcl::PointXYZ>::P
     iss.setNonMaxRadius(2 * 0.1f); // 4 times the leaf size used in voxel grid
     iss.setThreshold21(0.975);
     iss.setThreshold32(0.975);
-    iss.setMinNeighbors(10);
-    iss.setNumberOfThreads(16);
+    iss.setMinNeighbors(5);
+    iss.setNumberOfThreads(128);
     iss.compute(*keypoints);
 
     auto end = std::chrono::high_resolution_clock::now();

@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/efesendil/Projects/ICP_PCL
+CMAKE_SOURCE_DIR = /home/efesendil/Projects/PCL_ICP_cloned
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/efesendil/Projects/ICP_PCL/build
+CMAKE_BINARY_DIR = /home/efesendil/Projects/PCL_ICP_cloned/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/ICP_PCL/build/CMakeFiles /home/efesendil/Projects/ICP_PCL/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles /home/efesendil/Projects/PCL_ICP_cloned/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/ICP_PCL/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -128,6 +128,43 @@ pipeline: cmake_check_build_system
 pipeline/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pipeline.dir/build.make CMakeFiles/pipeline.dir/build
 .PHONY : pipeline/fast
+
+#=============================================================================
+# Target rules for targets named incremental_reg
+
+# Build rule for target.
+incremental_reg: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 incremental_reg
+.PHONY : incremental_reg
+
+# fast build rule for target.
+incremental_reg/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/build
+.PHONY : incremental_reg/fast
+
+src/incremental_registration.o: src/incremental_registration.cpp.o
+.PHONY : src/incremental_registration.o
+
+# target to build an object file
+src/incremental_registration.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/src/incremental_registration.cpp.o
+.PHONY : src/incremental_registration.cpp.o
+
+src/incremental_registration.i: src/incremental_registration.cpp.i
+.PHONY : src/incremental_registration.i
+
+# target to preprocess a source file
+src/incremental_registration.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/src/incremental_registration.cpp.i
+.PHONY : src/incremental_registration.cpp.i
+
+src/incremental_registration.s: src/incremental_registration.cpp.s
+.PHONY : src/incremental_registration.s
+
+# target to generate assembly for a file
+src/incremental_registration.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/src/incremental_registration.cpp.s
+.PHONY : src/incremental_registration.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -185,7 +222,11 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... incremental_reg"
 	@echo "... pipeline"
+	@echo "... src/incremental_registration.o"
+	@echo "... src/incremental_registration.i"
+	@echo "... src/incremental_registration.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

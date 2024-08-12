@@ -54,16 +54,17 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/efesendil/Projects/ICP_PCL
+CMAKE_SOURCE_DIR = /home/efesendil/Projects/PCL_ICP_cloned
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/efesendil/Projects/ICP_PCL/build
+CMAKE_BINARY_DIR = /home/efesendil/Projects/PCL_ICP_cloned/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
 all: CMakeFiles/pipeline.dir/all
+all: CMakeFiles/incremental_reg.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/pipeline.dir/clean
+clean: CMakeFiles/incremental_reg.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -81,14 +83,14 @@ clean: CMakeFiles/pipeline.dir/clean
 CMakeFiles/pipeline.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pipeline.dir/build.make CMakeFiles/pipeline.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pipeline.dir/build.make CMakeFiles/pipeline.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/efesendil/Projects/ICP_PCL/build/CMakeFiles --progress-num=1,2,3 "Built target pipeline"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles --progress-num=3,4,5 "Built target pipeline"
 .PHONY : CMakeFiles/pipeline.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/pipeline.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/ICP_PCL/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/pipeline.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/ICP_PCL/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles 0
 .PHONY : CMakeFiles/pipeline.dir/rule
 
 # Convenience name for target.
@@ -99,6 +101,32 @@ pipeline: CMakeFiles/pipeline.dir/rule
 CMakeFiles/pipeline.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pipeline.dir/build.make CMakeFiles/pipeline.dir/clean
 .PHONY : CMakeFiles/pipeline.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/incremental_reg.dir
+
+# All Build rule for target.
+CMakeFiles/incremental_reg.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles --progress-num=1,2 "Built target incremental_reg"
+.PHONY : CMakeFiles/incremental_reg.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/incremental_reg.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/incremental_reg.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/efesendil/Projects/PCL_ICP_cloned/build/CMakeFiles 0
+.PHONY : CMakeFiles/incremental_reg.dir/rule
+
+# Convenience name for target.
+incremental_reg: CMakeFiles/incremental_reg.dir/rule
+.PHONY : incremental_reg
+
+# clean rule for target.
+CMakeFiles/incremental_reg.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/incremental_reg.dir/build.make CMakeFiles/incremental_reg.dir/clean
+.PHONY : CMakeFiles/incremental_reg.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     // pcl::io::loadPCDFile(argv[1], *source_cloud);
     // pcl::io::loadPCDFile(argv[2], *target_cloud);
 
-    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/st_vallier_indoor_pcd_samples/indoor_pcds/");
+    std::vector<std::string> raw_pcds = get_pcd_files("/home/efesendil/Data/mms_pcd_samples/");
     std::vector<Eigen::Matrix4f> poses; // Assume poses are populated with 4x4 transformation matrices
     std::vector<Eigen::Matrix4f> poses_traj;
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
     PointCloudT::Ptr global_map(new PointCloudT);
 
 
-    for(int i = 1; i < 15 /*raw_pcds.size()*/; i++){
+    for(int i = 1; i < 50 /*raw_pcds.size()*/; i++){
 
 
         pcl::io::loadPCDFile(raw_pcds[i-1], *target_cloud);

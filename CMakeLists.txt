@@ -18,9 +18,11 @@ link_directories(${PCL_LIBRARY_DIRS})
 
 # Add executable
 add_executable(pipeline src/main.cpp src/pipeline.cpp)
+add_executable(incremental_reg src/incremental_registration.cpp)
 
 # Link libraries to the executable
 target_link_libraries(pipeline ${PCL_LIBRARIES})
+target_link_libraries(incremental_reg ${PCL_LIBRARIES})
 
 # Debugging messages
 message(STATUS "PCL include directories: ${PCL_INCLUDE_DIRS}")
